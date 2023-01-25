@@ -1010,7 +1010,7 @@ template <typename T>
 FMT_CONSTEXPR auto is_supported_floating_point(T) -> bool {
   if (std::is_same<T, float>()) return FMT_USE_FLOAT;
   if (std::is_same<T, double>()) return FMT_USE_DOUBLE;
-  if (std::is_same<T, long double>()) return FMT_USE_LONG_DOUBLE;
+  // if (std::is_same<T, long double>()) return FMT_USE_LONG_DOUBLE;
   return true;
 }
 
@@ -1592,7 +1592,7 @@ auto snprintf_float(T value, int precision, float_specs specs,
     *format_ptr++ = '.';
     *format_ptr++ = '*';
   }
-  if (std::is_same<T, long double>()) *format_ptr++ = 'L';
+  // if (std::is_same<T, long double>()) *format_ptr++ = 'L';
   *format_ptr++ = specs.upper ? 'A' : 'a';
   *format_ptr = '\0';
 
@@ -3247,7 +3247,7 @@ FMT_CONSTEXPR20 auto write(OutputIt out, T value) -> OutputIt {
   }
 
   constexpr auto specs = basic_format_specs<Char>();
-  using floaty = conditional_t<std::is_same<T, long double>::value, double, T>;
+  using floaty = conditional_t<std::is_same<T, double>::value, double, T>;
   using uint = typename dragonbox::float_info<floaty>::carrier_uint;
   uint mask = exponent_mask<floaty>();
   if ((bit_cast<uint>(value) & mask) == mask)

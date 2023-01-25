@@ -189,7 +189,7 @@
 #  define FMT_USE_DOUBLE 1
 #endif
 #ifndef FMT_USE_LONG_DOUBLE
-#  define FMT_USE_LONG_DOUBLE 1
+#  define FMT_USE_LONG_DOUBLE 0
 #endif
 
 #ifndef FMT_INLINE
@@ -587,8 +587,8 @@ enum class type {
   // followed by floating-point types.
   float_type,
   double_type,
-  long_double_type,
-  last_numeric_type = long_double_type,
+  // long_double_type,
+  last_numeric_type = double_type,
   cstring_type,
   string_type,
   pointer_type,
@@ -614,7 +614,7 @@ FMT_TYPE_CONSTANT(bool, bool_type);
 FMT_TYPE_CONSTANT(Char, char_type);
 FMT_TYPE_CONSTANT(float, float_type);
 FMT_TYPE_CONSTANT(double, double_type);
-FMT_TYPE_CONSTANT(long double, long_double_type);
+// FMT_TYPE_CONSTANT(long double, long_double_type);
 FMT_TYPE_CONSTANT(const Char*, cstring_type);
 FMT_TYPE_CONSTANT(basic_string_view<Char>, string_type);
 FMT_TYPE_CONSTANT(const void*, pointer_type);
@@ -1253,7 +1253,7 @@ template <typename Context> class value {
     char_type char_value;
     float float_value;
     double double_value;
-    long double long_double_value;
+    // long double long_double_value;
     const void* pointer;
     string_value<char_type> string;
     custom_value<Context> custom;
@@ -1269,7 +1269,7 @@ template <typename Context> class value {
   FMT_INLINE value(uint128_opt val) : uint128_value(val) {}
   constexpr FMT_INLINE value(float val) : float_value(val) {}
   constexpr FMT_INLINE value(double val) : double_value(val) {}
-  FMT_INLINE value(long double val) : long_double_value(val) {}
+  // FMT_INLINE value(long double val) : long_double_value(val) {}
   constexpr FMT_INLINE value(bool val) : bool_value(val) {}
   constexpr FMT_INLINE value(char_type val) : char_value(val) {}
   FMT_CONSTEXPR FMT_INLINE value(const char_type* val) {
@@ -1391,9 +1391,9 @@ template <typename Context> struct arg_mapper {
 
   FMT_CONSTEXPR FMT_INLINE auto map(float val) -> float { return val; }
   FMT_CONSTEXPR FMT_INLINE auto map(double val) -> double { return val; }
-  FMT_CONSTEXPR FMT_INLINE auto map(long double val) -> long double {
-    return val;
-  }
+  // FMT_CONSTEXPR FMT_INLINE auto map(long double val) -> long double {
+  //   return val;
+  // }
 
   FMT_CONSTEXPR FMT_INLINE auto map(char_type* val) -> const char_type* {
     return val;
@@ -1645,8 +1645,8 @@ FMT_CONSTEXPR FMT_INLINE auto visit_format_arg(
     return vis(arg.value_.float_value);
   case detail::type::double_type:
     return vis(arg.value_.double_value);
-  case detail::type::long_double_type:
-    return vis(arg.value_.long_double_value);
+  // case detail::type::long_double_type:
+  //   return vis(arg.value_.long_double_value);
   case detail::type::cstring_type:
     return vis(arg.value_.string.data);
   case detail::type::string_type:
@@ -3076,12 +3076,12 @@ struct formatter<T, Char,
       else
         FMT_ASSERT(false, "double support disabled");
       break;
-    case detail::type::long_double_type:
-      if (detail::const_check(FMT_USE_LONG_DOUBLE))
-        detail::parse_float_type_spec(specs_, eh);
-      else
-        FMT_ASSERT(false, "long double support disabled");
-      break;
+    // case detail::type::long_double_type:
+    //   if (detail::const_check(FMT_USE_LONG_DOUBLE))
+    //     detail::parse_float_type_spec(specs_, eh);
+    //   else
+    //     FMT_ASSERT(false, "long double support disabled");
+    //   break;
     case detail::type::cstring_type:
       detail::check_cstring_type_spec(specs_.type, eh);
       break;
